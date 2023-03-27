@@ -1,10 +1,15 @@
 import Fastify from 'fastify'
+import fastifyCors from '@fastify/cors'
 import { readFileSync } from 'fs'
 import { WikiTitleRequest } from './types'
 
 const indexes: { [key: string]: string } = {}
 
 const app = Fastify({})
+
+app.register(fastifyCors, {
+  origin: '*',
+})
 
 app.get('/wiki/:title', async (request: WikiTitleRequest, reply) => {
   const title = request.params.title.replace(/ /g, '_').replace(/^(.)/, p => p.toUpperCase())
@@ -21,6 +26,7 @@ app.get('/wiki/:title', async (request: WikiTitleRequest, reply) => {
   const content = readFileSync(`data/wiki/${id}.md`, 'utf8')
   return {
     id: parseInt(id),
+    title,
     content,
   }
 })
