@@ -38,13 +38,12 @@ const start = async () => {
     .forEach(line => {
       const [id, title] = line.split(',')
       if (!id || !title) return
-      // indexes[title.replace(/ /g, '_')] = id
       indexes[title] = id
     })
 
   try {
     const port = 3000
-    await app.listen({ port })
+    await app.listen({ host: '0.0.0.0', port })
     console.log(`listening on port ${port}`)
   } catch (err) {
     console.error(err)
